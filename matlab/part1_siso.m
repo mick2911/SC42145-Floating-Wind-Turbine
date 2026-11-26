@@ -15,9 +15,13 @@ wp = unique(abs(p));
 wz = unique(abs(z));
 
 % Bode plot
-[mag, phase, w] = bode(G_siso);
+w = logspace(-3, 2, 2000);
+[mag, phase] = bode(G_siso, w);
 mag = squeeze(mag);
 phase = squeeze(phase);
+if phase(1) < 180
+    phase = phase + 360;   % start at 360 deg per assignment convention
+end
 
 figure('Color', 'w');
 subplot(2, 1, 1);
@@ -34,6 +38,8 @@ semilogx(w, phase, 'Color', [0.85 0.33 0.10], 'LineWidth', 1.6); hold on;
 xline(wp, '--r');
 xline(wz, ':k');
 grid on;
+yticks(-90:90:360);
+ylim([-120 390]);
 ylabel('Phase (deg)');
 xlabel('Frequency (rad/s)');
 
